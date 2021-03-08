@@ -8,12 +8,19 @@ urlpatterns = [
 	path('', api.index),
 	path('index', api.index),
 	path('table', api.table),
-	path('test', api.test),
-	path('ocr', api.ocr),
-	path('pdf2jpg', api.pdf2jpg),
-	path('file2jpg', api.file2jpg),
-	path('jpg2ocr', api.jpg2ocr),
-	path('rtocr', api.rtocr),
-	path('rtpdf', api.rtpdf),
-
+	
+	path('imgfile2ocr', api.imgfile2ocr), #ocr
+	path('base64img2ocr', api.base64img2ocr), #jpg2ocr #rtocr
+	path('pdf2text', api.pdf2text),
+	path('pdf2ocr', api.pdf2ocr),
+	path('pdf2base64img', api.pdf2base64img), #pdf2jpg
+	path('pdf2base64imgarray', api.pdf2base64imgarray),#file2jpg
+	
+	#old
+	path('ocr', api.imgfile2ocr),
+	path('jpg2ocr', api.base64img2ocr),
+	path('rtocr', api.base64img2ocr),
+	path('pdf2jpg', api.pdf2base64img),
+	path('file2jpg', api.pdf2base64imgarray),
+	
 ]+ static("/", document_root="./app/www/")
