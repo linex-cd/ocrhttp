@@ -243,10 +243,10 @@ def base64imgs2ocr(request):
 
 			print("CRNN time: %.03fs" % (time.time() - start_time))
 			
-			
-			data['results'] = []
+			ocr = {}
+			ocr['results'] = []
 			for i in range(len(rois)):
-				data["results"].append({
+				ocr["results"].append({
 					'position': rois[i],
 					'text': ocr_result[i],
 					'hocr': hocr[i]
@@ -259,10 +259,10 @@ def base64imgs2ocr(request):
 			dl = mergelines.Hocr_DL(pages)
 			content = dl.get_content()
 			
-			data['dl'] = content
+			ocr['dl'] = content
 			
 			
-			ret.append(data)
+			ret.append(ocr)
 			
 		#endfor
 		
@@ -368,7 +368,7 @@ def pdf2ocr(request):
 
 				print("CRNN time: %.03fs" % (time.time() - start_time))
 				
-				
+				ocr = {}
 				ocr['results'] = []
 				for i in range(len(rois)):
 					ocr["results"].append({
