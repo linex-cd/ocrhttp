@@ -11,6 +11,7 @@ urlpatterns = [
 	
 	path('imgfile2ocr', api.imgfile2ocr), #ocr
 	path('base64img2ocr', api.base64img2ocr), #jpg2ocr #rtocr
+	path('base64imgs2ocr', api.base64imgs2ocr), #jpg2ocr #rtocr
 	path('pdf2text', api.pdf2text),
 	path('pdf2ocr', api.pdf2ocr),
 	path('pdf2base64img', api.pdf2base64img), #pdf2jpg

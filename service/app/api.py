@@ -184,6 +184,100 @@ def base64img2ocr(request):
 	return response
 
 	
+def base64imgs2ocr(request):
+
+	if request.method == 'POST':
+	
+		data = {}
+		data['msg'] = 'success'
+		data['code'] = '200'
+		#标记通道繁忙
+		state = os.path.exists('state.txt')
+		if state == False:
+			f = open('state.txt', "w")
+			f.write('busy')
+			f.close()
+			
+		else:
+			
+			print('worker busy...')
+			
+			data['msg'] = 'current workers are busy, please retry 10 seconds later'
+			data['code'] = '501'
+			response = HttpResponse(json.dumps(data), content_type='application/json')
+			
+			response["Access-Control-Allow-Origin"] = "*"
+			response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+			response["Access-Control-Max-Age"] = "1800"
+			response["Access-Control-Allow-Headers"] = "*"
+			
+			return response
+		#endif
+		
+		imgs = request.POST.get('imgs','')
+		
+		ret = []
+		
+		for base64_str in imgs:
+		
+			base64_str = base64_str.replace("data:image/png;base64," , '')
+			base64_str = base64_str.replace("data:image/jpg;base64," , '')
+			base64_str = base64_str.replace("data:image/bmp;base64," , '')
+			
+			imgString = base64.b64decode(base64_str)
+			nparr = np.fromstring(imgString,np.uint8)  
+			img = cv2.imdecode(nparr,cv2.IMREAD_COLOR)
+			
+
+	   
+			print('Image size: {}x{}'.format(img.shape[1], img.shape[0]))
+			
+			table = request.POST.get('table','no') 
+			istable = False 
+			if table == 'yes':
+				istable =  True
+
+			
+			start_time = time.time()
+			ocr_result, rois, hocr = ocr_engine.run_ocr(img, istable)
+
+			print("CRNN time: %.03fs" % (time.time() - start_time))
+			
+			
+			data['results'] = []
+			for i in range(len(rois)):
+				data["results"].append({
+					'position': rois[i],
+					'text': ocr_result[i],
+					'hocr': hocr[i]
+				})
+				
+			pages = []
+			page = {'content':[ocr_result], 'hocr': [hocr], 'bbox': [rois]}
+			
+			pages.append(page)
+			dl = mergelines.Hocr_DL(pages)
+			content = dl.get_content()
+			
+			data['dl'] = content
+			
+			
+			ret.append(data)
+			
+		#endfor
+		
+		#删除标记
+		os.remove('state.txt')
+	
+	response = HttpResponse(json.dumps(data), content_type='application/json')
+	response["Access-Control-Allow-Origin"] = "*"
+	response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+	response["Access-Control-Max-Age"] = "1800"
+	response["Access-Control-Allow-Headers"] = "*"
+	
+	return response
+
+	
 	
 def pdf2text(request):
 	
@@ -255,7 +349,7 @@ def pdf2ocr(request):
 			
 				base64_str = base64_str.replace("data:image/png;base64," , '')
 				
-					imgString = base64.b64decode(base64_str)
+				imgString = base64.b64decode(base64_str)
 				nparr = np.fromstring(imgString,np.uint8)  
 				img = cv2.imdecode(nparr,cv2.IMREAD_COLOR)
 				

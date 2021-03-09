@@ -60,6 +60,20 @@ uninstall
 		{'img': 'data:image/[jpg|png|bmp];base64,' +(base64 string)}
 
 
+#### POST /base64imgs2ocr
+
+##### post images base64 string to ocr
+
+- post headers
+
+		Content-Type: application/json;
+
+
+- post body
+
+		{'imgs': ['data:image/[jpg|png|bmp];base64,' +(base64 string)]}
+
+
 
 #### POST /pdf2text
 
