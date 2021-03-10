@@ -129,7 +129,9 @@ def base64img2ocr(request):
 			return response
 		#endif
 		
-		base64_str = request.POST.get('img','')
+		jsondata = json.loads(request.body.decode())
+		base64_str = jsondata['img'];
+		
 		base64_str = base64_str.replace("data:image/png;base64," , '')
 		base64_str = base64_str.replace("data:image/jpg;base64," , '')
 		base64_str = base64_str.replace("data:image/bmp;base64," , '')
@@ -214,11 +216,12 @@ def base64imgs2ocr(request):
 			return response
 		#endif
 		
-		imgs = request.POST.get('imgs','')
+		jsondata = json.loads(request.body.decode())
+		base64_strs = jsondata['imgs'];
 		
-		ret = []
+		ocrs = []
 		
-		for base64_str in imgs:
+		for base64_str in base64_strs:
 		
 			base64_str = base64_str.replace("data:image/png;base64," , '')
 			base64_str = base64_str.replace("data:image/jpg;base64," , '')
@@ -262,10 +265,11 @@ def base64imgs2ocr(request):
 			ocr['dl'] = content
 			
 			
-			ret.append(ocr)
+			ocrs.append(ocr)
 			
 		#endfor
 		
+		data['ocrs'] = ocrs
 		#删除标记
 		os.remove('state.txt')
 	
