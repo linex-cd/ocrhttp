@@ -133,7 +133,7 @@ def base64img2ocr(request):
 		base64_str = jsondata['img'];
 		
 		base64_str = base64_str.replace("data:image/png;base64," , '')
-		base64_str = base64_str.replace("data:image/jpg;base64," , '')
+		base64_str = base64_str.replace("data:image/jpeg;base64," , '')
 		base64_str = base64_str.replace("data:image/bmp;base64," , '')
 		
 		imgString = base64.b64decode(base64_str)
@@ -224,7 +224,7 @@ def base64imgs2ocr(request):
 		for base64_str in base64_strs:
 		
 			base64_str = base64_str.replace("data:image/png;base64," , '')
-			base64_str = base64_str.replace("data:image/jpg;base64," , '')
+			base64_str = base64_str.replace("data:image/jpeg;base64," , '')
 			base64_str = base64_str.replace("data:image/bmp;base64," , '')
 			
 			imgString = base64.b64decode(base64_str)
