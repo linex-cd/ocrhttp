@@ -106,17 +106,16 @@ def base64img2ocr(request):
 		data = {}
 		data['msg'] = 'success'
 		data['code'] = '200'
-		#标记通道繁忙
+		
+		'''
+		#标记通道繁忙,单通道下配置
 		state = os.path.exists('state.txt')
-		if state == False:
+		if state == True:
 			f = open('state.txt', "w")
 			f.write('busy')
 			f.close()
-			
-		else:
-			
 			print('worker busy...')
-			
+				
 			data['msg'] = 'current workers are busy, please retry 10 seconds later'
 			data['code'] = '501'
 			response = HttpResponse(json.dumps(data), content_type='application/json')
@@ -127,7 +126,8 @@ def base64img2ocr(request):
 			response["Access-Control-Allow-Headers"] = "*"
 			
 			return response
-		#endif
+		#endif	
+		'''
 		
 		jsondata = json.loads(request.body.decode())
 		base64_str = jsondata['img'];
@@ -173,10 +173,11 @@ def base64img2ocr(request):
 		
 		data['dl'] = content
 		
-		
+		'''
 		#删除标记
 		os.remove('state.txt')
-	
+		'''
+		
 	response = HttpResponse(json.dumps(data), content_type='application/json')
 	response["Access-Control-Allow-Origin"] = "*"
 	response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
@@ -193,17 +194,16 @@ def base64imgs2ocr(request):
 		data = {}
 		data['msg'] = 'success'
 		data['code'] = '200'
-		#标记通道繁忙
+		
+		'''
+		#标记通道繁忙,单通道下配置
 		state = os.path.exists('state.txt')
-		if state == False:
+		if state == True:
 			f = open('state.txt', "w")
 			f.write('busy')
 			f.close()
-			
-		else:
-			
 			print('worker busy...')
-			
+				
 			data['msg'] = 'current workers are busy, please retry 10 seconds later'
 			data['code'] = '501'
 			response = HttpResponse(json.dumps(data), content_type='application/json')
@@ -214,7 +214,8 @@ def base64imgs2ocr(request):
 			response["Access-Control-Allow-Headers"] = "*"
 			
 			return response
-		#endif
+		#endif	
+		'''
 		
 		jsondata = json.loads(request.body.decode())
 		base64_strs = jsondata['imgs'];
@@ -270,9 +271,11 @@ def base64imgs2ocr(request):
 		#endfor
 		
 		data['ocrs'] = ocrs
+		'''
 		#删除标记
 		os.remove('state.txt')
-	
+		'''
+		
 	response = HttpResponse(json.dumps(data), content_type='application/json')
 	response["Access-Control-Allow-Origin"] = "*"
 	response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
