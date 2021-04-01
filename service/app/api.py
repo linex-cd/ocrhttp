@@ -220,6 +220,34 @@ def base64imgs2ocr(request):
 		jsondata = json.loads(request.body.decode())
 		base64_strs = jsondata['imgs'];
 		
+		#统计
+		today = time.strftime("%Y%m%d");
+		
+		total_filename = 'app/www/statistics/total-'+today+'.txt'
+		total_old = 0
+		if os.path.exists(total_filename):
+			f = open(total_filename, "r")
+			
+			total_old = int(f.read())
+			f.close()
+			
+		#endif
+		
+		success_filename = 'app/www/statistics/success-'+today+'.txt'
+		success_old = 0
+		if os.path.exists(success_filename):
+			f = open(success_filename, "r")
+			
+			success_old = int(f.read())
+			f.close()
+			
+		#endif
+
+		#记录全部的
+		f = open(total_filename, "w")
+		f.write(str(total_old + len(base64_strs)))
+		f.close()
+		
 		ocrs = []
 		
 		for base64_str in base64_strs:
@@ -275,6 +303,11 @@ def base64imgs2ocr(request):
 		#删除标记
 		os.remove('state.txt')
 		'''
+		
+		#记录成功的
+		f = open(success_filename, "w")
+		f.write(str(success_old + len(base64_strs)))
+		f.close()
 		
 	response = HttpResponse(json.dumps(data), content_type='application/json')
 	response["Access-Control-Allow-Origin"] = "*"

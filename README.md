@@ -10,12 +10,14 @@ uninstall
 
 ./remove.sh [port]
 
-'''
-	path('file2jpg', api.file2jpg),
-	path('jpg2ocr', api.jpg2ocr),
-	path('rtocr', api.rtocr),
-	path('rtpdf', api.rtpdf),
-'''
+
+## Statistics
+
+http://ip:port/statistics/total-YYYYMMDD.txt
+
+http://ip:port/statistics/success-YYYYMMDD.txt
+
+
 ## PAGES
 
 #### GET /
